@@ -1,0 +1,45 @@
+version: '3'
+
+services:
+  ws1:
+    image: webserver
+    environment:
+      - PORT=1111
+    volumes:
+      - ./logs:/app/logs
+
+  ws2:
+    image: webserver
+    environment:
+      - PORT=2222
+    volumes:
+      - ./logs:/app/logs
+
+  ws3:
+    image: webserver
+    environment:
+      - PORT=3333
+    volumes:
+      - ./logs:/app/logs
+
+  ws4:
+    image: webserver
+    environment:
+      - PORT=4444
+    volumes:
+      - ./logs:/app/logs
+
+  lb:
+    image: haproxy
+    volumes:
+      - ./haproxy:/haproxy-override
+      - ./haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+    links:
+      - ws1
+      - ws2
+      - ws3
+      - ws4
+    ports:
+      - "80:80"
+      - "70:70"
+      
